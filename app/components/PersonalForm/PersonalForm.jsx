@@ -1,54 +1,80 @@
 'use client';
 
 import { formsContent } from "@/app/InformationSubmition/page";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const PersonalForm = () => {
-  const { setCurrentStep, personalInfo, setPersonalInfo } = useContext(formsContent);
+  const { setCurrentStep, personalInfo, setPersonalInfo ,storePersonal,setStorePersonal } = useContext(formsContent);
   const [emailError, setEmailError] = useState("");
+  const [maxDob,setMaxDob]=useState("");
 
-  const Save = (e) => {
+  
+  useEffect(()=>{
+    const today=new Date();
+    const maxDate=new Date(today.getFullYear()-18,today.getMonth(),today.getDate());
+    const formatDate=maxDate.toISOString().split("T")[0];
+    setMaxDob(formatDate);
+  },[])
+
+
+  const OnSubmit = (e) => {
     e.preventDefault();
     const requiredFields = ["name", "lastName", "email", "phone", "dob", "P_address", "NIC", "ID_Front", "ID_Back"];
     const missingFields = requiredFields.filter((field) => !personalInfo[field]);
 
+    const regexForEmail = /^[a-zA-Z0-9+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if(personalInfo.email &&  !regexForEmail.test((personalInfo.email))){
+      alert("Please Enter a Valid Email")
+    }
+
+
     if (missingFields.length > 0) {
       alert(`Please fill the following fields: ${missingFields.join(", ")}`);
-    } else {
-      setCurrentStep(1);
-    }
+      return;
+    }else{
+    setCurrentStep(1);
+  }
+
   };
 
   const onHandleChange = (e) => {
     const { name, value, files } = e.target;
     const regexForEmail=/^[a-zA-Z0-9+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-   if( name ===  'name' && !/^[a-zA-Z ]*$/.test((value)) ){
-    return ;
-   }else if(name === "lastName" && !/^[a-zA-Z ]*$/.test((value))){
-    return
-   }else if(name === "NIC" && !/^[0-9]{12,13}$/.test((value))){
-    return     //becasue i'm putting it into onchange event
-   }
-  //  else if(name === "phone" && !/^[0-9]{11,20}$/.test((value))){
-  //   return ;
-  //  }
+    
+    const validations={
+     name : /^[a-zA-Z ]*$/,
+     lastName: /^[a-zA-Z ]*$/,
+     phone:/^[0-9]*$/,
+     NIC:/^[0-9]*$/
+    }
 
-   if (name === 'email') {
+   if( validations[name] && !validations[name].test((value)) ){
+    return ;
+   }else if (name === 'email') {
     if (!regexForEmail.test(value)) {
       setEmailError("Invalid email format");
     } else {
-      setEmailError(""); // Clear error if the email is valid
+      setEmailError(""); 
     }
+  }else if(name === "dob" ){
+    const today=new Date();
+    const selectedDate=new Date(value);
+    const Eighteen_Years_Ago=new Date(today.getFullYear()-18,today.getMonth(),today.getDate())
+   if(selectedDate > today){
+    alert("Date of Birth Cannot be in the Future!")
+   }else if(selectedDate > Eighteen_Years_Ago){
+    alert("You must be Greater than 18 years Old")
+   }
   }
-
-  
+   
     setPersonalInfo({ ...personalInfo, [name]: files ? files[0] : value });
+  
   };
-  console.log(personalInfo)
 
   return (
     <div className="Personal-Form shadow-gray-600 shadow-lg">
-      <form>
+      <form onSubmit={OnSubmit}>
         <div className="form-first-seperate-border border border-gray-300 px-3 my-3 pb-3 rounded">
           <h3 className="font-bold text-2xl pt-2">Personal Information</h3>
           <hr />
@@ -58,14 +84,15 @@ const PersonalForm = () => {
             { label: "Name", name: "name", type: "text" , required: true ,minLength:3,maxLength:50},
             { label: "Last Name", name: "lastName", type: "text", required: true },
             { label: "Email Address", name: "email", type: "email", required: true },
-            { label: "Phone Number", name: "phone", type: "number",min:0 ,maxLength:20, required: true },
-            { label: "Date of Birth", name: "dob", type: "date", required: true },
+            { label: "Phone Number", name: "phone", type: "text", required: true,maxLength:20},
+            { label: "Date of Birth", name: "dob", type: "date" },
             { label: "Permanent Address", name: "P_address", type: "text",maxLength:150, required: true },
             { label: "Residential Address", name: "R_address", type: "text",maxLength:150, required: false },
-            { label: "NIC", name: "NIC", type: "text",required: true },
-            { label: "ID Card Front", name: "ID_Front", type: "file", required: true },
-            { label: "ID Card Back", name: "ID_Back", type: "file", required: true },
-          ].map(({ label, name, type, required, maxLength ,min, minLength, pattern}, index) => (
+            { label: "NIC", name: "NIC", type: "text",required: true,minLength:13,maxLength:13 },
+            { label: "ID Card Front", name: "ID_Front", type: "file", required: true, accept: ".png,.jpg,.jpeg" },
+            { label: "ID Card Back", name: "ID_Back", type: "file", required: true , accept: ".png,.jpg,.jpeg" },
+            { label : "Verified CNIC from Nadra " , name:"CnicVerified",type:"file",required:true ,accept: ".png,.jpg,.jpeg" }
+          ].map(({ label, name, type, required, maxLength ,min, minLength,accept}, index) => (
             <div key={index} className="relative py-2 flex items-center">
               <h3 className="font-semibold flex w-1/3">
                 {label} {required && <span className="text-red-500">*</span>}
@@ -79,6 +106,7 @@ const PersonalForm = () => {
                 maxLength={maxLength}
                 min={min}
                 minLength={minLength}
+                accept={accept}
                 placeholder={type !== "file" ? label : undefined }
                 className={`mx-5 w-1/2 py-2 px-2 border border-gray-400 rounded-md
                   ${emailError && "outline-none border border-none"}`}
@@ -89,20 +117,19 @@ const PersonalForm = () => {
             </div>
           ))}
          
-          </div>
-
           {/* Terms & Conditions */}
-          <div className="flex gap-2 ps-2 pt-4">
+          <div className="flex items-center gap-2  pt-4">
             <input type="checkbox" required className="cursor-pointer" />
             <p className="text-sm">
               I Agree To the Mobile Repair{" "}
               <span className="text-blue-500 underline font-semibold ps-1">terms & conditions</span>
             </p>
           </div>
+          </div>
 
-          {/* Submit Button */}
+
           <button
-            onClick={Save}
+            type="submit"
             className="flex justify-center items-center border mt-5 mx-auto border-gray-400 rounded py-2 px-7 hover:bg-blue-500 hover:text-white"
           >
             Save & Next

@@ -10,8 +10,27 @@ export const formsContent=createContext();
 
  const InformationSubmition= ()=>{
   const steps=['Personal Information','Business Information','Qualifications/Certificates','Experience Information']
-  const [currentStep,setCurrentStep]=useState(0);
-
+  const [currentStep,setCurrentStep]=useState(3);
+  const [storePersonal,setStorePersonal]=useState([])
+  const [BusinessInfo,setBusinessInfo]=useState({
+    businessName:"",
+    ownerName:"",
+    logo:"",
+    businessEmail:"",
+    businessPhone:"",
+    businessFullPhoto:"",
+    address:"",
+    COI:"",
+    businessLicense:"",
+    TIN:"",
+    utilityBills:"",
+    rentAgreement:"",
+    repairCertications:"",
+    paymentMethods:"",
+    socialLinks:"",
+    })
+  const [storeCertificates,setStoreCertificates]=useState([])
+  const [storeExperience,setStoreExperience]=useState([])
   const [personalInfo,setPersonalInfo]=useState({
     name:"",
     lastName:"",
@@ -22,7 +41,8 @@ export const formsContent=createContext();
     R_address:"",
     NIC:"",
     ID_Front:"",
-    ID_Back:""
+    ID_Back:"",
+    CnicVerified:""
   })
 
   return(
@@ -44,7 +64,10 @@ export const formsContent=createContext();
             ))}
             </div>
             <div className="bg-white">
-          <formsContent.Provider value={{setCurrentStep,personalInfo,setPersonalInfo}}>
+          <formsContent.Provider value={{setCurrentStep,personalInfo,
+            setPersonalInfo,storePersonal,setStorePersonal,BusinessInfo,
+            setBusinessInfo
+            }}>
             {currentStep ===0 && <PersonalForm/>}
             {currentStep ===1 && <BusinessDetails/>}
             {currentStep ===2 && <Certificaions/>}

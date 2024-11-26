@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import { formsContent } from "@/app/InformationSubmition/page";
+import { useContext, useState } from "react";
 
 const BusinessDetails = () => {
  const [socialLinks,setSocialLinks]=useState([""])
-
+const {BusinessInfo,setBusinessInfo}=useContext(formsContent)
  const HandleChange = (index,value)=>{
   const store_Link=[...socialLinks];
   store_Link[index]=value;
@@ -28,7 +29,59 @@ const BusinessDetails = () => {
              border-gray-300 px-3 my-3  pb-3 rounded">
             <h2 className="font-bold pt-2 text-2xl">Business Information</h2>
               <hr />
-              <h3 className="font-semibold py-2"> Business Name <span className="text-red-500">*</span></h3>
+              <div className="grid grid-cols-2">
+
+             { 
+             [{label:"Business Name",type:"text",placeholder :" Business Name" ,required:true },
+             {label:"Owner Name",type:"text",placeholder :" Owner Name" ,required:true },
+             {label:"Logo",type:"file",required:true,accept:".png, .jpg, .jpeg" },
+             {label:"Business Email Address",type:"email",placeholder:"Business Email Address",required:true,accept:".png, .jpg, .jpeg" },
+             { label: "Phone Number", type: "number", placeholder: "Phone Number", required: true },
+             { label: "Business Full Photo", type: "file", required: true },
+             { label: "Address", type: "text", placeholder: "Address", required: true },
+             { label: "COI (Registered companies)", type: "file", required: true },
+             { label: "Business License or Trade License", type: "file", required: true },
+             { label: "Taxpayer Identification Number (TIN)", type: "number", placeholder: "Taxpayer Identification Number (TIN)", required: true },
+             { label: "Utility Bills", type: "file", required: true },
+             { label: "Rent Agreement", type: "file", required: false },
+             { label: "Repair Certifications", type: "file", required: false },
+             { label: "Social Media Links", type: "text", required: false }
+             ].map(({label,type,placeholder,required,accept,options},index)=>(
+             <div key={index} className="py-2 flex items-center">
+              <h3 className="font-semibold py-2 w-1/3"> {label} {required && <span className="text-red-500">*</span>}</h3>
+              <input 
+              type={type} 
+              required={required}
+              placeholder={placeholder}
+              accept={accept}
+              options={options}
+               className="w-3/5 border border-gray-400 
+              rounded py-1 px-2"/>
+             </div>)
+             )}
+               <div className="flex gap-2 pt-4">
+             <h3 className="font-semibold py-2 w-1/2"> Payment Method</h3>
+               <label className="flex items-center space-x-2">
+               <input
+                 type="radio"
+                 name="paymentMethod"
+                 value="cash"
+                 className="w-4 h-4 border-gray-400 cursor-pointer"
+               />
+               <span>Cash</span>
+             </label>
+               <label className="flex items-center space-x-2">
+               <input
+                 type="radio"
+                 name="paymentMethod"
+                 value="Card"
+                 className="w-4 h-4 border-gray-400 cursor-pointer"
+               />
+               <span>Card</span>
+             </label>
+             </div>
+
+              {/* <h3 className="font-semibold py-2"> Business Name <span className="text-red-500">*</span></h3>
               <input type="text" required placeholder=" Business Name"
                className="w-full border border-gray-400 
               rounded py-1 px-2"/>
@@ -130,13 +183,15 @@ const BusinessDetails = () => {
               onClick={handleAddButton}
               className="bg-blue-500 text-white px-3 py-1 rounded-md mt-4">
                 Add More
-              </button>
-              <div className="flex gap-2 ps-2 pt-4">
+              </button> */}
+              <div className="flex items-center gap-2 ps-2 pt-4">
               <input type="checkbox" required className="cursor-pointer" />
               <p className="text-sm">I Agree To the Mobile Repair 
               <span className="text-blue-500 underline font-semibold ps-1">terms & conditions </span>
               </p>
             </div>
+            </div>
+
               <button className="flex justify-center items-center border mt-5 mx-auto 
              border-gray-400 rounded py-2 px-7 hover:bg-blue-500 hover:text-white ">
                 Save & Next
