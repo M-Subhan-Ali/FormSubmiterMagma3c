@@ -1,4 +1,13 @@
+"use client"
+import { useState } from "react";
+
 const Experience = () => {
+  const [isCurrentPosition,setIsCurrentPosition]=useState(false);
+
+  const HandleCheckBox=()=>{
+    setIsCurrentPosition(!isCurrentPosition)
+  }
+
   return (
     <div className="Personal-Form shadow-gray-600 shadow-lg ">
     <form>
@@ -6,28 +15,63 @@ const Experience = () => {
              border-gray-300 px-3 my-3  pb-3 rounded">
             <h3 className="font-bold text-2xl py-2">Experience Information</h3>
               <hr />
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-4">
               {[
-                  { label: "Role/Position", type: "text", placeholder: "Role/Position", required: true },
-                  { label: "Company/Organization Name", type: "text", placeholder: "Company/Organization Name", required: true },
-                  { label: "Start Date", type: "date", required: true },
-                  { label: "Year of Completion", type: "date", required: false },
-                  { label: "Total Experience in Years", type: "number", min: 0, required: true },
-                  { label: "Institution Name", type: "text", placeholder: "Institution Name", required: true }
-              ].map(({label,type,placeholder,required,min},index)=>(
+                { label: "Title", type: "text", placeholder: "Title", required: true },
+                { label: "Employment Type", type: "select" ,options:['Full Time','Part Time',"Contract", "Internship", "Freelance"] , required: true },
+                { label: "Company/Organization Name", type: "text", placeholder: "Company/Organization Name", required: true },
+                { label: "I am currently working in this role", type: "checkbox"},
+                { label: "Start Date", type: "date", required: true },
+                { label: "End Date", type: "date", required: true },
+                { label: "Location", type: "text", placeholder: "Location", required: true },
+                { label: "Location Type", type: "select", options:["On-Site","Hybrid","Remote"], required: true },
+                // { label: "Role/Position", type: "text", placeholder: "Role/Position", required: true },
+                // { label: "Year of Completion", type: "date", required: false },
+                // { label: "Total Experience in Years", type: "number", min: 0, required: true },
+                // { label: "Institution Name", type: "text", placeholder: "Institution Name", required: true }
+              ].map(({label,type,placeholder,required,min,options},index)=>{
+                // if(label === "End Date" && isCurrentPosition){
+                //   return null;
+                // }
+                return(
               <div key={index}
-               className="flex items-center justify-between mx-3">
-               <h3 className="w-1/3 font-semibold py-2">{label}
+               className={`flex items-center ${label === "I am currently working in this role" ? "justify-start gap-3" : 
+                "justify-between"} mx-3`}>
+                 {type === "checkbox" && (
+                   <input
+                   type={type}
+                   onChange={HandleCheckBox}
+                   className="p-2 w-5 h-5 cursor-pointer border border-gray-400 rounded-md"
+                   />
+                    )}
+               <h3 className={`${label === "I am currently working in this role" ? "w-1/2" : "w-1/3"} font-semibold py-2`}>{label}
                 {required && <span className="text-red-500">*</span>}
                 </h3>
-              <input
-               type={type}
-               required={required} 
-               placeholder={placeholder}
-               className="w-1/2 py-2 px-2 border border-gray-400
-               rounded-md"/>
+                {(type === "text" || type === "date" || type === "number") && (
+                  <input
+                    type={type}
+                    required={required}
+                    placeholder={placeholder}
+                    disabled={label === "End Date" && isCurrentPosition}
+                    min={min}
+                    className="w-1/2 py-2 px-2 border border-gray-400 rounded-md"
+                  />
+                )}
+                  {type === "select" && (
+                   <select
+                    defaultValue={""}
+                    required={required}
+                    className="w-1/2 py-2 px-2 border border-gray-400 rounded-md"
+                  >
+                    <option value="" disabled >Select {label}</option>
+                     {options.map((option, idx) => (
+                      <option key={idx} value={option}>{option}</option>
+                    ))}
+                  </select>
+                 )}
+                 
               </div>
-              ))
+              )})
               }
 
               {/* <h3 className="font-semibold py-2">Role/Position<span className="text-red-500">*</span></h3>

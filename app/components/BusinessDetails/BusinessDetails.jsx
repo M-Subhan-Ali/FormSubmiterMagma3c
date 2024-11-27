@@ -1,6 +1,6 @@
 'use client'
 
-import { formsContent } from "@/app/InformationSubmition/page";
+import { formsContent } from "@/app/components/Categories/Categories";
 import { useContext, useState } from "react";
 
 const BusinessDetails = () => {
@@ -44,7 +44,6 @@ const {BusinessInfo,setBusinessInfo}=useContext(formsContent)
              { label: "Taxpayer Identification Number (TIN)", type: "number", placeholder: "Taxpayer Identification Number (TIN)", required: true },
              { label: "Utility Bills", type: "file", required: true },
              { label: "Rent Agreement", type: "file", required: false },
-             { label: "Repair Certifications", type: "file", required: false },
              { label: "Social Media Links", type: "text", required: false }
              ].map(({label,type,placeholder,required,accept,options},index)=>(
              <div key={index} className="py-2 flex items-center">

@@ -1,6 +1,6 @@
 'use client';
 
-import { formsContent } from "@/app/InformationSubmition/page";
+import { formsContent } from "@/app/components/Categories/Categories";
 import { useContext, useEffect, useState } from "react";
 
 const PersonalForm = () => {
