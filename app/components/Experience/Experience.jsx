@@ -17,14 +17,14 @@ const Experience = () => {
               <hr />
               <div className="grid grid-cols-2 gap-4">
               {[
-                { label: "Title", type: "text", placeholder: "Title", required: true },
-                { label: "Employment Type", type: "select" ,options:['Full Time','Part Time',"Contract", "Internship", "Freelance"] , required: true },
-                { label: "Company/Organization Name", type: "text", placeholder: "Company/Organization Name", required: true },
-                { label: "I am currently working in this role", type: "checkbox"},
-                { label: "Start Date", type: "date", required: true },
-                { label: "End Date", type: "date", required: true },
-                { label: "Location", type: "text", placeholder: "Location", required: true },
-                { label: "Location Type", type: "select", options:["On-Site","Hybrid","Remote"], required: true },
+               { label: "Title", name: "title", type: "text", placeholder: "Title", required: true },
+               { label: "Employment Type", name: "employmentType", type: "select", options: ["Full Time", "Part Time", "Contract", "Internship", "Freelance"], required: true },
+               { label: "Company/Organization Name", name: "companyOrganizationName", type: "text", placeholder: "Company/Organization Name", required: true },
+               { label: "I am currently working in this role", name: "currentlyWorking", type: "checkbox" },
+               { label: "Start Date", name: "startDate", type: "date", required: true },
+               { label: "End Date", name: "endDate", type: "date", required: true },
+               { label: "Location", name: "location", type: "text", placeholder: "Location", required: true },
+               { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid", "Remote"], required: true }
                 // { label: "Role/Position", type: "text", placeholder: "Role/Position", required: true },
                 // { label: "Year of Completion", type: "date", required: false },
                 // { label: "Total Experience in Years", type: "number", min: 0, required: true },

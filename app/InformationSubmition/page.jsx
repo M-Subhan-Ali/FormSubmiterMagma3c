@@ -1,13 +1,13 @@
 "use client"
-import { useState } from "react";
-import Categories from "../components/Categories/Categories";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import { searchContext } from "../layout";
 
 
  const InformationSubmition= ()=>{
   const [description,setDescription]=useState(0);
-  const [next,setNext]=useState(false);
   const [showCategory,setShowCategory]=useState(false);
+  const {next,setNext}=useContext(searchContext);
   const router=useRouter();
 
   const Handler=(e)=>{

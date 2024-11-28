@@ -5,7 +5,34 @@ import { useContext, useState } from "react";
 
 const BusinessDetails = () => {
  const [socialLinks,setSocialLinks]=useState([""])
-const {BusinessInfo,setBusinessInfo}=useContext(formsContent)
+ const {BusinessInfo,setBusinessInfo}=useContext(formsContent);
+ const [emailError, setEmailError] = useState("");
+
+const onChangeHandler=(e)=>{
+ const {name,value,files}=e.target;
+ const regexForEmail=/^[a-zA-Z0-9+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+ const validations={
+  businessName: /^[a-zA-Z0-9 ]*$/,
+  ownerName:/^[a-zA-Z ]*$/,
+  businessPhone: /^[0-9]*$/, 
+  TIN:/^[0-9]*$/
+} 
+
+
+if( validations[name] && !validations[name].test((value)) ){
+  return ;
+ }else if (name === 'businessEmail') {
+  if (!regexForEmail.test(value)) {
+    setEmailError("Invalid email format");
+  } else {
+    setEmailError(""); 
+  }
+ }
+ setBusinessInfo({...BusinessInfo,[name] : files ? files[0] : value })
+
+}
+
  const HandleChange = (index,value)=>{
   const store_Link=[...socialLinks];
   store_Link[index]=value;
@@ -30,32 +57,39 @@ const {BusinessInfo,setBusinessInfo}=useContext(formsContent)
             <h2 className="font-bold pt-2 text-2xl">Business Information</h2>
               <hr />
               <div className="grid grid-cols-2">
-
              { 
-             [{label:"Business Name",type:"text",placeholder :" Business Name" ,required:true },
-             {label:"Owner Name",type:"text",placeholder :" Owner Name" ,required:true },
-             {label:"Logo",type:"file",required:true,accept:".png, .jpg, .jpeg" },
-             {label:"Business Email Address",type:"email",placeholder:"Business Email Address",required:true,accept:".png, .jpg, .jpeg" },
-             { label: "Phone Number", type: "number", placeholder: "Phone Number", required: true },
-             { label: "Business Full Photo", type: "file", required: true },
-             { label: "Address", type: "text", placeholder: "Address", required: true },
-             { label: "COI (Registered companies)", type: "file", required: true },
-             { label: "Business License or Trade License", type: "file", required: true },
-             { label: "Taxpayer Identification Number (TIN)", type: "number", placeholder: "Taxpayer Identification Number (TIN)", required: true },
-             { label: "Utility Bills", type: "file", required: true },
-             { label: "Rent Agreement", type: "file", required: false },
-             { label: "Social Media Links", type: "text", required: false }
-             ].map(({label,type,placeholder,required,accept,options},index)=>(
+             [{label:"Business Name",name:"businessName",type:"text",placeholder :" Business Name" ,required:true },
+             {label:"Owner Name",name:"ownerName",type:"text",placeholder :" Owner Name" ,required:true },
+             {label:"Logo",name:"logo",type:"file",required:true,accept:".png, .jpg, .jpeg" },
+             {label:"Business Email Address",name:"businessEmail",type:"email",placeholder:"Business Email Address",required:true,accept:".png, .jpg, .jpeg" },
+             { label: "Phone Number", name:"businessPhone",type: "text", placeholder: "Phone Number",maxLength:20 , required: true },
+             { label: "Business Full Photo",name:"businessFullPhoto", type: "file", required: true },
+             { label: "Address", type: "text",name:"address", placeholder: "Address", required: true },
+             { label: "COI (Registered companies)",name:"COI", type: "file", required: true },
+             { label: "Business License or Trade License",name:"businessLicense", type: "file", required: true },
+             { label: "Taxpayer Identification Number (TIN)",name:"TIN", type: "text",maxLength:13, placeholder: "Taxpayer Identification Number (TIN)", required: true },
+             { label: "Utility Bills",name:"utilityBills", type: "file", required: true },
+             { label: "Rent Agreement",name:"rentAgreement", type: "file", required: false },
+             { label: "Social Media Links",name:"socialLinks", type: "text", required: false }
+             ].map(({label,type,placeholder,required,accept,options,name,maxLength,min},index)=>(
              <div key={index} className="py-2 flex items-center">
-              <h3 className="font-semibold py-2 w-1/3"> {label} {required && <span className="text-red-500">*</span>}</h3>
+              <h3 className="font-semibold py-2 w-2/5"> {label} {required && <span className="text-red-500">*</span>}</h3>
               <input 
               type={type} 
+              name={name}
               required={required}
+              value={type === "file" ? undefined : BusinessInfo[name]}
+              onChange={onChangeHandler}
               placeholder={placeholder}
               accept={accept}
               options={options}
-               className="w-3/5 border border-gray-400 
+              maxLength={maxLength}
+              // min={min}
+              className="w-3/6 border border-gray-400 
               rounded py-1 px-2"/>
+              {name === "businessEmail" && emailError && (
+                  <span className="absolute  right-[16%] text-red-500 text-xs">{emailError}</span>
+                )}
              </div>)
              )}
                <div className="flex gap-2 pt-4">
@@ -63,7 +97,8 @@ const {BusinessInfo,setBusinessInfo}=useContext(formsContent)
                <label className="flex items-center space-x-2">
                <input
                  type="radio"
-                 name="paymentMethod"
+                 name="paymentMethods"
+                 onChange={onChangeHandler}
                  value="cash"
                  className="w-4 h-4 border-gray-400 cursor-pointer"
                />
@@ -72,7 +107,8 @@ const {BusinessInfo,setBusinessInfo}=useContext(formsContent)
                <label className="flex items-center space-x-2">
                <input
                  type="radio"
-                 name="paymentMethod"
+                 name="paymentMethods"
+                 onChange={onChangeHandler}
                  value="Card"
                  className="w-4 h-4 border-gray-400 cursor-pointer"
                />

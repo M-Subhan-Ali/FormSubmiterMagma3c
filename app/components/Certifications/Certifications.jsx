@@ -1,4 +1,33 @@
+"use client"
+import { useContext } from "react";
+import { formsContent } from "../Categories/Categories";
+
 const Certificaions = () => {
+
+  const {Certificates,setCertificates}=useContext(formsContent)
+
+  const OnChangeHandler=(e)=>{
+    const {name,value,files}=e.target;
+    
+    const validations={
+      CertificationName:/^[a-zA-Z ]*$/,
+      IssuingOrganization:/^[a-zA-Z ]*$/,
+      CertificateNumber:/^[0-9]*$/,
+      InstitutionName:/^[a-zA-Z ]*$/,
+      VerificationReferenceNumber:/^[0-9]*$/
+      // DateofIssue:/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2[0-9]|3[01])\/(19|20)\d{2}$/,
+      // DateofExpiry:/^(0[1-9]|1[0-2])
+    }
+    
+    if(validations[name] && !validations[name].test((value))){
+      return
+    }
+   
+    setCertificates({...Certificates,[name]:files ? files[0] : value})
+    
+
+  }
+
   return (
     <div className="Personal-Form shadow-gray-600 shadow-lg ">
     <form>
@@ -8,16 +37,16 @@ const Certificaions = () => {
               <hr />
               <div className="grid grid-cols-2 gap-4">
               {
-                [  { label: "Certification Name", type: "text", placeholder: "Certification Name", required: true },
-                  { label: "Issuing Organization", type: "text", placeholder: "Issuing Organization", required: true },
-                  { label: "Certificate Number", type: "text", placeholder: "Certificate Number", required: true },
-                  { label: "Date of Issue", type: "date", required: true },
-                  { label: "Date of Expiry", type: "date", required: true },
-                  { label: "Certificate Upload", type: "file", required: true },
-                  { label: "Institution Name", type: "text", placeholder: "Institution Name", required: true },
-                  { label: "Year of Completion", type: "date", required: false },
-                  { label: "Verification Reference Number", type: "text", placeholder: "Verification Reference Number", maxLength: 13, required: true },
-                ].map(({label,type,placeholder,required,maxLength},index)=>(
+                [  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },
+                  { label: "Issuing Organization", name:"IssuingOrganization" , type: "text", placeholder: "Issuing Organization", required: true },
+                  { label: "Certificate Number", name:"CertificateNumber" , type: "text", placeholder: "Certificate Number", required: true },
+                  { label: "Date of Issue", name:"DateofIssue" , type: "date", required: true },
+                  { label: "Date of Expiry", name:"DateofExpiry" , type: "date", required: true },
+                  { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true },
+                  { label: "Institution Name", name:"InstitutionName" , type: "text", placeholder: "Institution Name", required: true },
+                  { label: "Year of Completion", name:"YearofCompletion" , type: "date", required: false },
+                  { label: "Verification Reference Number", name:"VerificationReferenceNumber" , type: "text", placeholder: "Verification Reference Number", maxLength: 13, required: true },
+                ].map(({label,type,placeholder,required,maxLength,name},index)=>(
                 <div key={index} 
                 className="flex items-center">
                   <h3 className="w-1/3 font-semibold py-2">{label}
@@ -27,6 +56,9 @@ const Certificaions = () => {
                   type={type}
                   required={required}
                   placeholder={placeholder}
+                  name={name}
+                  onChange={OnChangeHandler}
+                  value={ type === "file" ? undefined : Certificates[name]}
                   maxLength={maxLength} 
                   className="w-1/2 py-2 px-2 border border-gray-400
                     rounded-md"/>

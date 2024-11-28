@@ -2,9 +2,11 @@
 
 import { formsContent } from "@/app/components/Categories/Categories";
 import { useContext, useEffect, useState } from "react";
+import { CurrentStepUsers } from "../Users/Users";
 
 const PersonalForm = () => {
   const { setCurrentStep, personalInfo, setPersonalInfo ,storePersonal,setStorePersonal } = useContext(formsContent);
+  const { currentStepUser,setCurrentStepUser } = useContext(CurrentStepUsers);
   const [emailError, setEmailError] = useState("");
   const [maxDob,setMaxDob]=useState("");
 
@@ -33,7 +35,7 @@ const PersonalForm = () => {
       alert(`Please fill the following fields: ${missingFields.join(", ")}`);
       return;
     }else{
-    setCurrentStep(1);
+    setCurrentStepUser(1)
   }
 
   };

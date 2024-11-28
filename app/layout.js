@@ -25,6 +25,7 @@ const geistMono = localFont({
 
 export default function RootLayout({ children }) {
   const [search,setSearch]=useState("");
+  const [next,setNext]=useState(false);
   const data = [
     {
       shopName: "Magma Repair Shop",
@@ -214,7 +215,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-         <searchContext.Provider value={{search,setSearch,filterdData}}>
+         <searchContext.Provider value={{search,setSearch,filterdData,next,setNext}}>
           <Navbar/>
         {children}
          </searchContext.Provider>
