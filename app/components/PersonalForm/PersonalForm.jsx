@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { CurrentStepUsers } from "../Users/Users";
 
 const PersonalForm = () => {
-  const { setCurrentStep, personalInfo, setPersonalInfo ,storePersonal,setStorePersonal } = useContext(formsContent);
+  const { setCurrentStep, personalInfo, setPersonalInfo ,updateSectionData } = useContext(formsContent);
   const { currentStepUser,setCurrentStepUser } = useContext(CurrentStepUsers);
   const [emailError, setEmailError] = useState("");
   const [maxDob,setMaxDob]=useState("");
@@ -36,8 +36,9 @@ const PersonalForm = () => {
       return;
     }else{
     setCurrentStepUser(1)
-  }
-
+    updateSectionData("PersonalForm", personalInfo);
+    }
+   
   };
 
   const onHandleChange = (e) => {
@@ -78,10 +79,10 @@ const PersonalForm = () => {
     <div className="Personal-Form shadow-gray-600 shadow-lg">
       <form onSubmit={OnSubmit}>
         <div className="form-first-seperate-border border border-gray-300 px-3 my-3 pb-3 rounded">
-          <h3 className="font-bold text-2xl pt-2">Personal Information</h3>
+          <h3 className="font-bold text-2xl pt-4">Personal Information</h3>
           <hr />
           {/* Fields */}
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 pt-5 pb-8">
           {[
             { label: "Name", name: "name", type: "text" , required: true ,minLength:3,maxLength:50},
             { label: "Last Name", name: "lastName", type: "text", required: true },

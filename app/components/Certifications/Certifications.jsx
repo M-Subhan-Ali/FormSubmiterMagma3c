@@ -5,7 +5,7 @@ import { CurrentStepUsers } from "../Users/Users";
 
 const Certificaions = () => {
 
-  const {Certificates,setCertificates,setCurrentStep}=useContext(formsContent)
+  const {Certificates,setCertificates,updateSectionData}=useContext(formsContent)
   const {setCurrentStepUser}=useContext(CurrentStepUsers)
   const [startDate, setStartDate] = useState("");
   const today = new Date().toISOString().split("T")[0]; 
@@ -37,6 +37,8 @@ const Certificaions = () => {
   const HandleSubmit = (e) => {
    e.preventDefault();
    setCurrentStepUser(2)
+   updateSectionData("Certifications", Certificates);
+
   }
 
   return (
@@ -44,9 +46,9 @@ const Certificaions = () => {
     <form onSubmit={HandleSubmit}>
     <div className="form-first-seperate-border border
              border-gray-300 px-3 my-3  pb-3 rounded">
-            <h3 className="font-bold text-2xl py-2">Qualifications/Certificates</h3>
+            <h3 className="font-bold text-2xl py-4">Qualifications/Certificates</h3>
               <hr />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 pt-5 pb-8">
               {
                 [  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },
                   { label: "Issuing Organization", name:"IssuingOrganization" , type: "text", placeholder: "Issuing Organization", required: true },

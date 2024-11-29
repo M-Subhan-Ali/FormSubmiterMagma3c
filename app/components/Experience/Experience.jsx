@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { formsContent } from "../Categories/Categories";
 
 const Experience = () => {
-  const {Experience,setExperience,setCurrentStep}=useContext(formsContent);
+  const {Experience,setExperience,updateSectionData}=useContext(formsContent);
   const [isCurrentPosition,setIsCurrentPosition]=useState(false);
 
   const today = new Date().toISOString().split("T")[0]; 
@@ -32,26 +32,28 @@ const Experience = () => {
 
   const HandlerSubmit = (e) => {
     e.preventDefault();
+    updateSectionData("Experience", Experience);
+
     
   }
 
   return (
     <div className="Personal-Form shadow-gray-600 shadow-lg ">
     <form onSubmit={HandlerSubmit}>
-    <div className="form-first-seperate-border border
-             border-gray-300 px-3 my-3  pb-3 rounded">
-            <h3 className="font-bold text-2xl py-2">Experience Information</h3>
+    <div className="form-first-seperate-border border 
+             border-gray-300 px-3 my-3  p-3 rounded">
+            <h3 className="font-bold text-2xl py-4">Experience Information</h3>
               <hr />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 pt-5 pb-8">
               {[
                { label: "Title", name: "title", type: "text", placeholder: "Title", required: true },
+               { label: "Location", name: "location", type: "text", placeholder: "Location", required: true },
                { label: "Employment Type", name: "employmentType", type: "select", options: ["Full Time", "Part Time", "Contract", "Internship", "Freelance"], required: true },
                { label: "Company/Organization Name", name: "companyOrganizationName", type: "text", placeholder: "Company/Organization Name", required: true },
                { label: "I am currently working in this role", name: "currentlyWorking", type: "checkbox" },
                { label: "Start Date", name: "startDate", type: "date", required: true,max:today },
                { label: "End Date", name: "endDate", type: "date", required: true ,max:today},
-               { label: "Location", name: "location", type: "text", placeholder: "Location", required: true },
-               { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid"], required: true }
+              //  { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid"], required: true }
                 // { label: "Role/Position", type: "text", placeholder: "Role/Position", required: true },
                 // { label: "Year of Completion", type: "date", required: false },
                 // { label: "Total Experience in Years", type: "number", min: 0, required: true },
@@ -135,9 +137,9 @@ const Experience = () => {
             
              
               <div className="flex gap-2 ps-2 pt-4">
-              <input type="checkbox" required className="cursor-pointer" />
-              <p className="text-sm">I Agree To the Mobile Repair 
-              <span className="text-blue-500 underline font-semibold ps-1">terms & conditions </span>
+              <input type="checkbox" required className="cursor-pointer w-5 h-5" />
+              <p className="text-sm">If Provided Information is Wrong then Your Application might take longer. 
+              {/* <span className="text-blue-500 underline font-semibold ps-1">terms & conditions </span> */}
               </p>
             </div>
             </div>

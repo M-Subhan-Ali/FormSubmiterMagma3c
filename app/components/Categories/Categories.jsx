@@ -28,8 +28,26 @@ const Categories = ()=>{
   })();
   const [currentStep,setCurrentStep]=useState(0);
   const [storePersonal,setStorePersonal]=useState([])
-  
- 
+  const [formData, setFormData] = useState([]);
+
+  const updateSectionData = (sectionName, data) => {
+    setFormData((prev)=>{
+    const updatedData=[...prev];
+    const sectionIndex=updatedData.findIndex((item)=>item.saim === sectionName);
+    
+    if( sectionIndex !== -1){
+      updatedData[sectionIndex].data=data;
+    }else{
+      updatedData.push({saim:sectionName,data})
+    }
+
+    return updatedData;
+
+  })
+   
+    
+  };
+  console.log(formData)
   const [BusinessInfo,setBusinessInfo]=useState({
     businessName:"",
     ownerName:"",
@@ -40,7 +58,7 @@ const Categories = ()=>{
     address:"",
     COI:"",
     businessLicense:"",
-    TIN:"",
+    NTN:"",
     utilityBills:"",
     rentAgreement:"",
     socialLinks:"",
@@ -83,6 +101,8 @@ const Categories = ()=>{
     locationType: ""
   })
 
+
+
 return(
   <div className="w-3/4 sm:w-4/5 mx-auto">
           <div className="flex justify-between  pb-3 ">
@@ -100,7 +120,7 @@ return(
             ))}
             </div>
             <div className="bg-white">
-          <formsContent.Provider value={{setCurrentStep,personalInfo,
+          <formsContent.Provider value={{updateSectionData,setCurrentStep,personalInfo,
             setPersonalInfo,storePersonal,Certificates,setCertificates,setStorePersonal,BusinessInfo,
             setBusinessInfo,Experience,setExperience
             }}>
