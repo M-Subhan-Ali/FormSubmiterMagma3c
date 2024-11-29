@@ -1,22 +1,29 @@
 "use client"
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { formsContent } from "../Categories/Categories";
+import { CurrentStepUsers } from "../Users/Users";
 
 const Certificaions = () => {
 
-  const {Certificates,setCertificates}=useContext(formsContent)
+  const {Certificates,setCertificates,setCurrentStep}=useContext(formsContent)
+  const {setCurrentStepUser}=useContext(CurrentStepUsers)
+  const [startDate, setStartDate] = useState("");
+  const today = new Date().toISOString().split("T")[0]; 
+ 
 
   const OnChangeHandler=(e)=>{
     const {name,value,files}=e.target;
     
+    if(name === "DateofIssue"){
+      setStartDate(value);
+    }
+
     const validations={
       CertificationName:/^[a-zA-Z ]*$/,
       IssuingOrganization:/^[a-zA-Z ]*$/,
       CertificateNumber:/^[0-9]*$/,
       InstitutionName:/^[a-zA-Z ]*$/,
       VerificationReferenceNumber:/^[0-9]*$/
-      // DateofIssue:/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2[0-9]|3[01])\/(19|20)\d{2}$/,
-      // DateofExpiry:/^(0[1-9]|1[0-2])
     }
     
     if(validations[name] && !validations[name].test((value))){
@@ -25,12 +32,16 @@ const Certificaions = () => {
    
     setCertificates({...Certificates,[name]:files ? files[0] : value})
     
+  }
 
+  const HandleSubmit = (e) => {
+   e.preventDefault();
+   setCurrentStepUser(2)
   }
 
   return (
     <div className="Personal-Form shadow-gray-600 shadow-lg ">
-    <form>
+    <form onSubmit={HandleSubmit}>
     <div className="form-first-seperate-border border
              border-gray-300 px-3 my-3  pb-3 rounded">
             <h3 className="font-bold text-2xl py-2">Qualifications/Certificates</h3>
@@ -40,13 +51,17 @@ const Certificaions = () => {
                 [  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },
                   { label: "Issuing Organization", name:"IssuingOrganization" , type: "text", placeholder: "Issuing Organization", required: true },
                   { label: "Certificate Number", name:"CertificateNumber" , type: "text", placeholder: "Certificate Number", required: true },
-                  { label: "Date of Issue", name:"DateofIssue" , type: "date", required: true },
-                  { label: "Date of Expiry", name:"DateofExpiry" , type: "date", required: true },
-                  { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true },
+                  { label: "Date of Issue", name:"DateofIssue" , type: "date", required: true ,max:today},
+                  { label: "Date of Expiry", name:"DateofExpiry" , type: "date", required: true , min:startDate
+                    ? new Date(new Date(startDate).setFullYear(new Date(startDate).getFullYear() + 10))
+                        .toISOString()
+                        .split("T")[0]
+                    : "",},
+                  { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true ,accept:".jpg,.png,.jpeg"},
                   { label: "Institution Name", name:"InstitutionName" , type: "text", placeholder: "Institution Name", required: true },
                   { label: "Year of Completion", name:"YearofCompletion" , type: "date", required: false },
                   { label: "Verification Reference Number", name:"VerificationReferenceNumber" , type: "text", placeholder: "Verification Reference Number", maxLength: 13, required: true },
-                ].map(({label,type,placeholder,required,maxLength,name},index)=>(
+                ].map(({label,type,placeholder,required,maxLength,name,min,max,accept},index)=>(
                 <div key={index} 
                 className="flex items-center">
                   <h3 className="w-1/3 font-semibold py-2">{label}
@@ -60,6 +75,10 @@ const Certificaions = () => {
                   onChange={OnChangeHandler}
                   value={ type === "file" ? undefined : Certificates[name]}
                   maxLength={maxLength} 
+                  disabled={name === "DateofExpiry" && startDate === ""}
+                  min={min}
+                  max={max}
+                  accept={accept}
                   className="w-1/2 py-2 px-2 border border-gray-400
                     rounded-md"/>
                     </div>

@@ -1,16 +1,43 @@
 "use client"
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { formsContent } from "../Categories/Categories";
 
 const Experience = () => {
+  const {Experience,setExperience,setCurrentStep}=useContext(formsContent);
   const [isCurrentPosition,setIsCurrentPosition]=useState(false);
 
-  const HandleCheckBox=()=>{
-    setIsCurrentPosition(!isCurrentPosition)
+  const today = new Date().toISOString().split("T")[0]; 
+
+
+  
+  const HandleCheckBox=(e)=>{
+   const {name,checked}=e.target;
+   setIsCurrentPosition(checked);
+   setExperience({...Experience,[name]:checked});
+  }
+
+  const OnChangeHandler=(e)=>{
+   const {name,value}=e.target;
+   const validations={
+    title:/^[a-zA-Z ]*$/,
+    companyOrganizationName:/^[a-zA-Z0-9 ]*$/,
+   }
+
+   if(validations[name] && !validations[name].test((value))){
+    return;
+   }
+   setExperience({...Experience,[name]:value});
+   
+  }
+
+  const HandlerSubmit = (e) => {
+    e.preventDefault();
+    
   }
 
   return (
     <div className="Personal-Form shadow-gray-600 shadow-lg ">
-    <form>
+    <form onSubmit={HandlerSubmit}>
     <div className="form-first-seperate-border border
              border-gray-300 px-3 my-3  pb-3 rounded">
             <h3 className="font-bold text-2xl py-2">Experience Information</h3>
@@ -21,15 +48,15 @@ const Experience = () => {
                { label: "Employment Type", name: "employmentType", type: "select", options: ["Full Time", "Part Time", "Contract", "Internship", "Freelance"], required: true },
                { label: "Company/Organization Name", name: "companyOrganizationName", type: "text", placeholder: "Company/Organization Name", required: true },
                { label: "I am currently working in this role", name: "currentlyWorking", type: "checkbox" },
-               { label: "Start Date", name: "startDate", type: "date", required: true },
-               { label: "End Date", name: "endDate", type: "date", required: true },
+               { label: "Start Date", name: "startDate", type: "date", required: true,max:today },
+               { label: "End Date", name: "endDate", type: "date", required: true ,max:today},
                { label: "Location", name: "location", type: "text", placeholder: "Location", required: true },
-               { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid", "Remote"], required: true }
+               { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid"], required: true }
                 // { label: "Role/Position", type: "text", placeholder: "Role/Position", required: true },
                 // { label: "Year of Completion", type: "date", required: false },
                 // { label: "Total Experience in Years", type: "number", min: 0, required: true },
                 // { label: "Institution Name", type: "text", placeholder: "Institution Name", required: true }
-              ].map(({label,type,placeholder,required,min,options},index)=>{
+              ].map(({label,type,placeholder,required,min,max,options,name},index)=>{
                 // if(label === "End Date" && isCurrentPosition){
                 //   return null;
                 // }
@@ -40,6 +67,8 @@ const Experience = () => {
                  {type === "checkbox" && (
                    <input
                    type={type}
+                   checked={isCurrentPosition}
+                   name={name}
                    onChange={HandleCheckBox}
                    className="p-2 w-5 h-5 cursor-pointer border border-gray-400 rounded-md"
                    />
@@ -52,15 +81,24 @@ const Experience = () => {
                     type={type}
                     required={required}
                     placeholder={placeholder}
+                    name={name}
+                    onChange={OnChangeHandler}
+                    value={Experience[name] || ""}
+                    options={options}
                     disabled={label === "End Date" && isCurrentPosition}
                     min={min}
+                    max={max}
                     className="w-1/2 py-2 px-2 border border-gray-400 rounded-md"
                   />
                 )}
                   {type === "select" && (
                    <select
-                    defaultValue={""}
+                    // defaultValue={""}
                     required={required}
+                    name={name}
+                    options={options} 
+                    onChange={OnChangeHandler}
+                    value={Experience[name] || ""}
                     className="w-1/2 py-2 px-2 border border-gray-400 rounded-md"
                   >
                     <option value="" disabled >Select {label}</option>

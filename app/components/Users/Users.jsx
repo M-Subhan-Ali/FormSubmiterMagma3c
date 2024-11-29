@@ -30,11 +30,11 @@ const Users = () => {
             ))}
             </div>
             <div>
-              <CurrentStepUsers value={{currentStepUser,setCurrentStepUser}}>
+              <CurrentStepUsers.Provider value={{currentStepUser,setCurrentStepUser}}>
              {currentStepUser  === 0 && <PersonalForm/>}
              {currentStepUser  === 1 && <Certificaions/>}
              {currentStepUser  === 2 && <Experience/>}
-              </CurrentStepUsers>
+              </CurrentStepUsers.Provider>
             </div>
   </>
   )

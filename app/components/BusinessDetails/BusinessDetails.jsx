@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 
 const BusinessDetails = () => {
  const [socialLinks,setSocialLinks]=useState([""])
- const {BusinessInfo,setBusinessInfo}=useContext(formsContent);
+ const {BusinessInfo,setBusinessInfo,setCurrentStep}=useContext(formsContent);
  const [emailError, setEmailError] = useState("");
 
 const onChangeHandler=(e)=>{
@@ -33,6 +33,11 @@ if( validations[name] && !validations[name].test((value)) ){
 
 }
 
+ const HandleSubmit = (e) => {
+   e.preventDefault();
+   setCurrentStep(1)
+ }
+
  const HandleChange = (index,value)=>{
   const store_Link=[...socialLinks];
   store_Link[index]=value;
@@ -51,7 +56,7 @@ if( validations[name] && !validations[name].test((value)) ){
   return (
   <>
   <div className="Business-Form shadow-gray-600 shadow-lg ">
-    <form>
+    <form onSubmit={HandleSubmit}>
     <div className="form-Second border
              border-gray-300 px-3 my-3  pb-3 rounded">
             <h2 className="font-bold pt-2 text-2xl">Business Information</h2>
@@ -63,13 +68,13 @@ if( validations[name] && !validations[name].test((value)) ){
              {label:"Logo",name:"logo",type:"file",required:true,accept:".png, .jpg, .jpeg" },
              {label:"Business Email Address",name:"businessEmail",type:"email",placeholder:"Business Email Address",required:true,accept:".png, .jpg, .jpeg" },
              { label: "Phone Number", name:"businessPhone",type: "text", placeholder: "Phone Number",maxLength:20 , required: true },
-             { label: "Business Full Photo",name:"businessFullPhoto", type: "file", required: true },
+             { label: "Business Full Photo",name:"businessFullPhoto", type: "file", required: true ,accept:".png, .jpg, .jpeg"},
              { label: "Address", type: "text",name:"address", placeholder: "Address", required: true },
-             { label: "COI (Registered companies)",name:"COI", type: "file", required: true },
-             { label: "Business License or Trade License",name:"businessLicense", type: "file", required: true },
+             { label: "COI (Registered companies)",name:"COI", type: "file", required: true ,accept:".png, .jpg, .jpeg"},
+             { label: "Business License or Trade License",name:"businessLicense", type: "file", required: true ,accept:".png, .jpg, .jpeg"},
              { label: "Taxpayer Identification Number (TIN)",name:"TIN", type: "text",maxLength:13, placeholder: "Taxpayer Identification Number (TIN)", required: true },
-             { label: "Utility Bills",name:"utilityBills", type: "file", required: true },
-             { label: "Rent Agreement",name:"rentAgreement", type: "file", required: false },
+             { label: "Utility Bills",name:"utilityBills", type: "file", required: true,accept:".png, .jpg, .jpeg" },
+             { label: "Rent Agreement",name:"rentAgreement", type: "file", required: false ,accept:".png, .jpg, .jpeg"},
              { label: "Social Media Links",name:"socialLinks", type: "text", required: false }
              ].map(({label,type,placeholder,required,accept,options,name,maxLength,min},index)=>(
              <div key={index} className="py-2 flex items-center">
@@ -227,7 +232,7 @@ if( validations[name] && !validations[name].test((value)) ){
             </div>
             </div>
 
-              <button className="flex justify-center items-center border mt-5 mx-auto 
+              <button  className="flex justify-center items-center border mt-5 mx-auto 
              border-gray-400 rounded py-2 px-7 hover:bg-blue-500 hover:text-white ">
                 Save & Next
             </button>

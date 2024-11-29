@@ -102,7 +102,7 @@ return(
             <div className="bg-white">
           <formsContent.Provider value={{setCurrentStep,personalInfo,
             setPersonalInfo,storePersonal,Certificates,setCertificates,setStorePersonal,BusinessInfo,
-            setBusinessInfo
+            setBusinessInfo,Experience,setExperience
             }}>
             {currentStep ===0 && <BusinessDetails/>}
             {currentStep ===1 && <Users/>}
