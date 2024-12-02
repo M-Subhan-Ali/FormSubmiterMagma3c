@@ -7,6 +7,59 @@ const BusinessDetails = () => {
  const [socialLinks,setSocialLinks]=useState([""])
  const {BusinessInfo,setBusinessInfo,setCurrentStep,updateSectionData}=useContext(formsContent);
  const [emailError, setEmailError] = useState("");
+ const [isModalOpen, setIsModalOpen] = useState(false);
+
+const handleTimeChange = (day, field, value) => {
+  setBusinessInfo((prev) => ({
+    ...prev,
+    businessHours: {
+      ...prev.businessHours,
+      [day]: { ...prev.businessHours[day], [field]: value },
+    },
+  }));
+};
+
+const handleCheckboxChange = (day, field) => {
+  setBusinessInfo((prev) => {
+    const updatedHours = { ...prev.businessHours }; // Copy the businessHours to avoid direct mutation
+
+    // Handle mutually exclusive checkboxes
+    if (field === "is24Hours") {
+      updatedHours[day].is24Hours = !updatedHours[day].is24Hours;
+      
+      // If 24 Hours is selected, ensure "Closed" is deselected and reset times.
+      if (updatedHours[day].is24Hours) {
+        updatedHours[day].isClosed = false;
+        updatedHours[day].open = "00:00";  // Set default 24-hour open time
+        updatedHours[day].close = "23:59"; // Set default 24-hour close time
+      } else {
+        updatedHours[day].open = ""; // Clear open time if not 24 hours
+        updatedHours[day].close = "";
+      }
+    }
+
+    if (field === "isClosed") {
+      updatedHours[day].isClosed = !updatedHours[day].isClosed;
+      
+      // If "Closed" is selected, ensure "24 Hours" is deselected and clear times.
+      if (updatedHours[day].isClosed) {
+        updatedHours[day].is24Hours = false;
+        updatedHours[day].open = "";  // Clear open time if closed
+        updatedHours[day].close = ""; // Clear close time
+      }
+    }
+
+    return { ...prev, businessHours: updatedHours }; // Return the updated state
+  });
+};
+
+
+
+const saveBusinessHours = () => {
+  setIsModalOpen(false);
+  console.log("Updated Business Info:", BusinessInfo);
+};
+console.log(BusinessInfo)
 
 const onChangeHandler=(e,index= null)=>{
  const {name,value,files}=e.target;
@@ -77,12 +130,11 @@ if( validations[name] && !validations[name].test((value)) ){
               {label:"Business Email Address",name:"businessEmail",type:"email",placeholder:"Business Email Address",required:true,accept:".png, .jpg, .jpeg" },
               { label: "Phone Number", name:"businessPhone",type: "text", placeholder: "Phone Number",maxLength:20 , required: true },
               { label: "Business/Shop Photo",name:"businessFullPhoto", type: "file", required: true ,accept:".png, .jpg, .jpeg"},
-              // { label: "COI (Registered companies)",name:"COI", type: "file", required: true ,accept:".png, .jpg, .jpeg"},
               { label: "Business Registration",name:"businessLicense", type: "file", required: true ,accept:".png, .jpg, .jpeg"},
               { label: "NTN",name:"NTN", type: "text",maxLength:13, placeholder: "NTN", required: true },
               { label: "Utility Bills",name:"utilityBills", type: "file", required: true,accept:".png, .jpg, .jpeg" },
               { label: "Rent Agreement",name:"rentAgreement", type: "file", required: false ,accept:".png, .jpg, .jpeg"},
-              { label: "Social Media Links",name:"socialLinks", type: "text", required: false }
+              // { label: "Social Media Links",name:"socialLinks", type: "text", required: false }
              ].map(({label,type,placeholder,required,accept,options,name,maxLength,min},index)=>(
              <div key={index} className="py-2 flex items-center">
               <h3 className="font-semibold py-2 w-2/5"> {label} {required && <span className="text-red-500">*</span>}</h3>
@@ -103,6 +155,7 @@ if( validations[name] && !validations[name].test((value)) ){
               {name === "businessEmail" && emailError && (
                   <span className="absolute  right-[16%] text-red-500 text-xs">{emailError}</span>
                 )}
+                
                 {name === socialLinks && (<>
                
                     <button
@@ -127,10 +180,111 @@ if( validations[name] && !validations[name].test((value)) ){
              
              )}
               {/* Social Links */}
-            <div className="py-2">
+            
+               <div className="flex gap-2 pt-4">
+             <h3 className="font-semibold py-2 w-1/2"> Payment Method</h3>
+               <label className="flex items-center space-x-2">
+               <input
+                 type="radio"
+                 name="paymentMethods"
+                 onChange={onChangeHandler}
+                 value="cash"
+                 className="w-4 h-4 border-gray-400 cursor-pointer"
+               />
+               <span>Cash</span>
+             </label>
+               <label className="flex items-center space-x-2">
+               <input
+                 type="radio"
+                 name="paymentMethods"
+                 onChange={onChangeHandler}
+                 value="Card"
+                 className="w-4 h-4 border-gray-400 cursor-pointer"
+               />
+               <span>Card</span>
+             </label>
+             </div>
+             <div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Set Business Hours
+        </button>
+
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
+              <h2 className="text-xl font-bold mb-4">Set Business Hours</h2>
+              <div className="grid grid-cols-2">
+                
+              {Object.keys(BusinessInfo.businessHours).map((day) => (
+                <div key={day} className="mb-4">
+                  <h3 className="font-semibold">{day}</h3>
+                  <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    checked={BusinessInfo.businessHours[day].is24Hours}
+    onChange={() => handleCheckboxChange(day, "is24Hours")}
+  />
+  <span>24 Hours Open</span>
+</label>
+
+<label className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    checked={BusinessInfo.businessHours[day].isClosed}
+    onChange={() => handleCheckboxChange(day, "isClosed")}
+  />
+  <span>Closed</span>
+</label>
+
+                  </div>
+                  {!BusinessInfo.businessHours[day].is24Hours && !BusinessInfo.businessHours[day].isClosed && (
+                    <div className="flex items-center gap-4 mt-2">
+                      <input
+                        type="time"
+                        value={BusinessInfo.businessHours[day].open}
+                        onChange={(e) => handleTimeChange(day, "open", e.target.value)}
+                        className="border border-gray-400 rounded py-1 px-2"
+                      />
+                      <span>to</span>
+                      <input
+                        type="time"
+                        value={BusinessInfo.businessHours[day].close}
+                        onChange={(e) => handleTimeChange(day, "close", e.target.value)}
+                        className="border border-gray-400 rounded py-1 px-2"
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+              </div>
+
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveBusinessHours}
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+             <div className="py-2">
               <h3 className="font-semibold py-2">Social Media Links</h3>
               {socialLinks.map((link, index) => (
-                <div key={index} className="flex items-center gap-4 my-2">
+                <div key={index} className="flex  items-center gap-4 my-2">
                   <input
                     type="text"
                     name="socialLinks"
@@ -158,133 +312,6 @@ if( validations[name] && !validations[name].test((value)) ){
                 Add More
               </button>
             </div>
-               <div className="flex gap-2 pt-4">
-             <h3 className="font-semibold py-2 w-1/2"> Payment Method</h3>
-               <label className="flex items-center space-x-2">
-               <input
-                 type="radio"
-                 name="paymentMethods"
-                 onChange={onChangeHandler}
-                 value="cash"
-                 className="w-4 h-4 border-gray-400 cursor-pointer"
-               />
-               <span>Cash</span>
-             </label>
-               <label className="flex items-center space-x-2">
-               <input
-                 type="radio"
-                 name="paymentMethods"
-                 onChange={onChangeHandler}
-                 value="Card"
-                 className="w-4 h-4 border-gray-400 cursor-pointer"
-               />
-               <span>Card</span>
-             </label>
-             </div>
-
-              {/* <h3 className="font-semibold py-2"> Business Name <span className="text-red-500">*</span></h3>
-              <input type="text" required placeholder=" Business Name"
-               className="w-full border border-gray-400 
-              rounded py-1 px-2"/>
-              <h3 className="font-semibold py-2"> Owner Name <span className="text-red-500">*</span></h3>
-              <input type="text" required placeholder=" Owner Name"
-               className="w-full border border-gray-400 
-              rounded py-1 px-2"/>
-              <h3 className="font-semibold py-2">Logo <span className="text-red-500">*</span></h3>
-              <input type="file" required
-               className="w-full border border-gray-400 
-              rounded  cursor-pointer"/>
-              <h3 className="font-semibold py-2"> Business Email Address <span className="text-red-500">*</span></h3>
-              <input type="email" required placeholder="Business Email"
-               className="w-full border py-1 px-2 border-gray-400 
-              rounded  "/>
-              <h3 className="font-semibold py-2"> Phone Number <span className="text-red-500">*</span></h3>
-              <input type="number" min={0}  required placeholder="Number"
-               className="w-full border py-1 px-2 border-gray-400 
-              rounded  "/>
-              <h3 className="font-semibold py-2"> Business Full Photo  <span className="text-red-500">*</span></h3>
-              <input type="file"  required 
-               className="w-full border border-gray-400 
-              rounded  "/>
-              <h3 className="font-semibold py-2"> Address <span className="text-red-500">*</span></h3>
-              <input type="text"  required placeholder="Address"
-               className="w-full border py-1 px-2 border-gray-400 
-              rounded  "/>
-              <h3 className="font-semibold py-2"> Location <span className="text-red-500">*</span></h3>
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13602.980549932341!2d74.33168844235838!3d31.531159149189364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1732263194720!5m2!1sen!2s"
-               width="600" height="450" allowFullScreen="" loading="lazy"
-               className="w-full"
-               referrerPolicy="no-referrer-when-downgrade"></iframe>
-              <h3 className="font-semibold py-2"> Certificate of Incorporation  (Registered companies)<span className="text-red-500">*</span></h3>
-              <input type="file"  required placeholder=" Certificate of Incorporation"
-               className="w-full border border-gray-400 
-              rounded  "/>
-              <h3 className="font-semibold py-2"> Business License or Trade License<span className="text-red-500">*</span></h3>
-              <input type="file"  required placeholder="  Business License or Trade License"
-               className="w-full border border-gray-400 
-              rounded  "/>
-              <h3 className="font-semibold py-2"> Taxpayer Identification Number (TIN)<span className="text-red-500">*</span></h3>
-              <input type="number"  required placeholder=" Taxpayer Identification Number (TIN)"
-               className="w-full border border-gray-400 
-              rounded  py-1 px-2 "/>
-               <h3 className="font-semibold py-2"> Utility Bills  <span className="text-red-500">*</span></h3>
-              <input type="file" required placeholder=" Business Name"
-               className="w-full border border-gray-400 
-              rounded "/>
-              <h3 className="font-semibold py-2"> Rent Agreement (if operating from a rented space).</h3>
-              <input type="file" required placeholder=" Rent Agreement"
-               className="w-full border border-gray-400 
-              rounded "/>
-              <h3 className="font-semibold py-2"> Repair Certifications</h3>
-              <input type="file" required placeholder=" Rent Agreement"
-               className="w-full border border-gray-400 
-              rounded "/>
-               <h3 className="font-semibold py-2"> Payment Method</h3>
-               <div className="flex gap-2">
-
-               <label className="flex items-center space-x-2">
-               <input
-                 type="radio"
-                 name="paymentMethod"
-                 value="cash"
-                 className="w-4 h-4 border-gray-400 cursor-pointer"
-               />
-               <span>Cash</span>
-             </label>
-               <label className="flex items-center space-x-2">
-               <input
-                 type="radio"
-                 name="paymentMethod"
-                 value="Card"
-                 className="w-4 h-4 border-gray-400 cursor-pointer"
-               />
-               <span>Card</span>
-             </label>
-             </div>
-             <h3 className="font-semibold py-2"> Social Media Links</h3>
-             {socialLinks.map((links,index)=>(
-              <div className="border border-gray-400 
-                 rounded mb-4"
-              key={index}>
-                <input
-                 onChange={(e)=>(HandleChange(index,e.target.value))}
-                 value={links}
-                 type="text" required placeholder="Social Links"
-                 className="w-11/12  py-1 px-2 outline-none"/>
-              {socialLinks.length >1 && 
-              <button 
-              onClick={()=>HandleRemove(index)}
-              className="bg-red-500 text-white px-3 py-1 rounded-md">
-                remove
-              </button>
-              }
-                 </div>
-              ))}
-              <button 
-              onClick={handleAddButton}
-              className="bg-blue-500 text-white px-3 py-1 rounded-md mt-4">
-                Add More
-              </button> */}
               <div className="flex items-center gap-2 ps-2 pt-4">
               <input type="checkbox" required className="cursor-pointer" />
               <p className="text-sm">I Agree To the Mobile Repair 

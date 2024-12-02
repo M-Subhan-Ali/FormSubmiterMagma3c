@@ -90,7 +90,6 @@ const PersonalForm = () => {
             { label: "Phone Number", name: "phone", type: "text", required: true,maxLength:20},
             { label: "Date of Birth", name: "dob", type: "date" },
             { label: "Permanent Address", name: "P_address", type: "text",maxLength:150, required: true },
-            { label: "Residential Address", name: "R_address", type: "text",maxLength:150, required: false },
             { label: "NIC", name: "NIC", type: "text",required: true,minLength:13,maxLength:13 },
             { label: "ID Card Front", name: "ID_Front", type: "file", required: true, accept: ".png,.jpg,.jpeg" },
             { label: "ID Card Back", name: "ID_Back", type: "file", required: true , accept: ".png,.jpg,.jpeg" },

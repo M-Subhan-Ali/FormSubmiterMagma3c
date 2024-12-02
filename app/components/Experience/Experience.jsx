@@ -33,8 +33,7 @@ const Experience = () => {
   const HandlerSubmit = (e) => {
     e.preventDefault();
     updateSectionData("Experience", Experience);
-
-    
+    alert("Your Sole Propretiership Application Has Successfully Submit");
   }
 
   return (

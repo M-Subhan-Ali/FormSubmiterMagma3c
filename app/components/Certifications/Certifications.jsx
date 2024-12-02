@@ -52,17 +52,16 @@ const Certificaions = () => {
               {
                 [  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },
                   { label: "Issuing Organization", name:"IssuingOrganization" , type: "text", placeholder: "Issuing Organization", required: true },
-                  { label: "Certificate Number", name:"CertificateNumber" , type: "text", placeholder: "Certificate Number", required: true },
-                  { label: "Date of Issue", name:"DateofIssue" , type: "date", required: true ,max:today},
-                  { label: "Date of Expiry", name:"DateofExpiry" , type: "date", required: true , min:startDate
+                  // { label: "Certificate Number", name:"CertificateNumber" , type: "text", placeholder: "Certificate Number", required: true },
+                  { label: "Start Date", name:"startDate" , type: "date", required: true ,max:today},
+                  { label: "End Date", name:"endDate" , type: "date", required: true , min:startDate
                     ? new Date(new Date(startDate).setFullYear(new Date(startDate).getFullYear() + 10))
                         .toISOString()
                         .split("T")[0]
                     : "",},
                   { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true ,accept:".jpg,.png,.jpeg"},
                   { label: "Institution Name", name:"InstitutionName" , type: "text", placeholder: "Institution Name", required: true },
-                  { label: "Year of Completion", name:"YearofCompletion" , type: "date", required: false },
-                  { label: "Verification Reference Number", name:"VerificationReferenceNumber" , type: "text", placeholder: "Verification Reference Number", maxLength: 13, required: true },
+                  // { label: "Year of Completion", name:"YearofCompletion" , type: "date", required: false },
                 ].map(({label,type,placeholder,required,maxLength,name,min,max,accept},index)=>(
                 <div key={index} 
                 className="flex items-center">

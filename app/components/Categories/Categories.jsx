@@ -30,7 +30,7 @@ const Categories = ()=>{
   const [storePersonal,setStorePersonal]=useState([])
   const [formData, setFormData] = useState([]);
 
-  const updateSectionData = (sectionName, data) => {
+  const updateSectionData = (sectionName, data) => {  
     setFormData((prev)=>{
     const updatedData=[...prev];
     const sectionIndex=updatedData.findIndex((item)=>item.saim === sectionName);
@@ -56,13 +56,21 @@ const Categories = ()=>{
     businessPhone:"",
     businessFullPhoto:"",
     address:"",
-    COI:"",
     businessLicense:"",
     NTN:"",
     utilityBills:"",
     rentAgreement:"",
     socialLinks:"",
     paymentMethods:"",
+    businessHours: {
+      Monday: { open: "", close: "", is24Hours: false, isClosed: false },
+      Tuesday: { open: "", close: "", is24Hours: false, isClosed: false },
+      Wednesday: { open: "", close: "", is24Hours: false, isClosed: false },
+      Thursday: { open: "", close: "", is24Hours: false, isClosed: false },
+      Friday: { open: "", close: "", is24Hours: false, isClosed: false },
+      Saturday: { open: "", close: "", is24Hours: false, isClosed: false },
+      Sunday: { open: "", close: "", is24Hours: false, isClosed: false },
+    }
     })
   const [personalInfo,setPersonalInfo]=useState({
     name:"",
@@ -81,13 +89,12 @@ const Categories = ()=>{
   const [Certificates,setCertificates]=useState({
     CertificationName: "",
     IssuingOrganization: "",
-    CertificateNumber: "",
-    DateofIssue: "",
-    DateofExpiry: "",
+    // CertificateNumber: "",
+    startDate: "",
+    endDate: "",
     CertificateUpload: "",
     InstitutionName: "",
-    YearofCompletion: "",
-    VerificationReferenceNumber: "",
+    // YearofCompletion: "",
   })
 
   const [Experience,setExperience]=useState({
