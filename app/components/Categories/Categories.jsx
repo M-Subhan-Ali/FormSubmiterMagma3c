@@ -19,7 +19,7 @@ const Categories = ()=>{
           "Users"
         ];
       case "Shop with Multiple Technicians":
-        return ['Business Information','Technicians'];
+        return ['Business Information','Staff'];
       case "Multi Sites & Multi Users":
         return ["Business Information", "Location Information", "Users"];
       default:
@@ -62,15 +62,15 @@ const Categories = ()=>{
     rentAgreement:"",
     socialLinks:"",
     paymentMethods:"",
-    businessHours: {
-      Monday: { open: "", close: "", is24Hours: false, isClosed: false },
-      Tuesday: { open: "", close: "", is24Hours: false, isClosed: false },
-      Wednesday: { open: "", close: "", is24Hours: false, isClosed: false },
-      Thursday: { open: "", close: "", is24Hours: false, isClosed: false },
-      Friday: { open: "", close: "", is24Hours: false, isClosed: false },
-      Saturday: { open: "", close: "", is24Hours: false, isClosed: false },
-      Sunday: { open: "", close: "", is24Hours: false, isClosed: false },
-    }
+    // businessHours: {
+    //   Monday: { open: "", close: "", is24Hours: false, isClosed: false },
+    //   Tuesday: { open: "", close: "", is24Hours: false, isClosed: false },
+    //   Wednesday: { open: "", close: "", is24Hours: false, isClosed: false },
+    //   Thursday: { open: "", close: "", is24Hours: false, isClosed: false },
+    //   Friday: { open: "", close: "", is24Hours: false, isClosed: false },
+    //   Saturday: { open: "", close: "", is24Hours: false, isClosed: false },
+    //   Sunday: { open: "", close: "", is24Hours: false, isClosed: false },
+    // }
     })
   const [personalInfo,setPersonalInfo]=useState({
     name:"",
@@ -95,6 +95,7 @@ const Categories = ()=>{
     CertificateUpload: "",
     InstitutionName: "",
     // YearofCompletion: "",
+    description:"",
   })
 
   const [Experience,setExperience]=useState({
@@ -105,7 +106,8 @@ const Categories = ()=>{
     startDate: "",
     endDate: "",
     location: "",
-    locationType: ""
+    locationType: "",
+    description:"",
   })
 
 
@@ -129,7 +131,7 @@ return(
             <div className="bg-white">
           <formsContent.Provider value={{updateSectionData,setCurrentStep,personalInfo,
             setPersonalInfo,storePersonal,Certificates,setCertificates,setStorePersonal,BusinessInfo,
-            setBusinessInfo,Experience,setExperience
+            setBusinessInfo,Experience,setExperience,next,setNext
             }}>
             {currentStep ===0 && <BusinessDetails/>}
             {currentStep ===1 && <Users/>}

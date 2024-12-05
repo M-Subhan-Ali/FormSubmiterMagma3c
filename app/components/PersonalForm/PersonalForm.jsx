@@ -4,7 +4,7 @@ import { formsContent } from "@/app/components/Categories/Categories";
 import { useContext, useEffect, useState } from "react";
 import { CurrentStepUsers } from "../Users/Users";
 
-const PersonalForm = () => {
+const PersonalForm = ({ onNext ,applicationCount}) => {
   const { setCurrentStep, personalInfo, setPersonalInfo ,updateSectionData } = useContext(formsContent);
   const { currentStepUser,setCurrentStepUser } = useContext(CurrentStepUsers);
   const [emailError, setEmailError] = useState("");
@@ -35,10 +35,10 @@ const PersonalForm = () => {
       alert(`Please fill the following fields: ${missingFields.join(", ")}`);
       return;
     }else{
-    setCurrentStepUser(1)
+    // setCurrentStepUser(0)
     updateSectionData("PersonalForm", personalInfo);
-    }
-   
+  }
+  onNext(personalInfo);
   };
 
   const onHandleChange = (e) => {
@@ -79,7 +79,7 @@ const PersonalForm = () => {
     <div className="Personal-Form shadow-gray-600 shadow-lg">
       <form onSubmit={OnSubmit}>
         <div className="form-first-seperate-border border border-gray-300 px-3 my-3 pb-3 rounded">
-          <h3 className="font-bold text-2xl pt-4">Personal Information</h3>
+          <h3 className="font-bold text-2xl pt-4">Personal Information {applicationCount}</h3>
           <hr />
           {/* Fields */}
           <div className="grid grid-cols-2 pt-5 pb-8">

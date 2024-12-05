@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { formsContent } from "../Categories/Categories";
 
-const Experience = () => {
+const Experience = ({ onNext }) => {
   const {Experience,setExperience,updateSectionData}=useContext(formsContent);
   const [isCurrentPosition,setIsCurrentPosition]=useState(false);
 
@@ -28,12 +28,14 @@ const Experience = () => {
    }
    setExperience({...Experience,[name]:value});
    
+   
   }
 
   const HandlerSubmit = (e) => {
     e.preventDefault();
     updateSectionData("Experience", Experience);
-    alert("Your Sole Propretiership Application Has Successfully Submit");
+    // alert("Your Sole Propretiership Application Has Successfully Submit");
+    onNext(Experience)
   }
 
   return (
@@ -49,10 +51,11 @@ const Experience = () => {
                { label: "Location", name: "location", type: "text", placeholder: "Location", required: true },
                { label: "Employment Type", name: "employmentType", type: "select", options: ["Full Time", "Part Time", "Contract", "Internship", "Freelance"], required: true },
                { label: "Company/Organization Name", name: "companyOrganizationName", type: "text", placeholder: "Company/Organization Name", required: true },
-               { label: "I am currently working in this role", name: "currentlyWorking", type: "checkbox" },
                { label: "Start Date", name: "startDate", type: "date", required: true,max:today },
+               { label: "I am currently working in this role", name: "currentlyWorking", type: "checkbox" },
                { label: "End Date", name: "endDate", type: "date", required: true ,max:today},
-              //  { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid"], required: true }
+               { label: "Description", name:"description" , type: "text", placeholder: "Description", required: true },
+               //  { label: "Location Type", name: "locationType", type: "select", options: ["On-Site", "Hybrid"], required: true }
                 // { label: "Role/Position", type: "text", placeholder: "Role/Position", required: true },
                 // { label: "Year of Completion", type: "date", required: false },
                 // { label: "Total Experience in Years", type: "number", min: 0, required: true },

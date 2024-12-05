@@ -7,58 +7,58 @@ const BusinessDetails = () => {
  const [socialLinks,setSocialLinks]=useState([""])
  const {BusinessInfo,setBusinessInfo,setCurrentStep,updateSectionData}=useContext(formsContent);
  const [emailError, setEmailError] = useState("");
- const [isModalOpen, setIsModalOpen] = useState(false);
+//  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const handleTimeChange = (day, field, value) => {
-  setBusinessInfo((prev) => ({
-    ...prev,
-    businessHours: {
-      ...prev.businessHours,
-      [day]: { ...prev.businessHours[day], [field]: value },
-    },
-  }));
-};
+// const handleTimeChange = (day, field, value) => {
+//   setBusinessInfo((prev) => ({
+//     ...prev,
+//     businessHours: {
+//       ...prev.businessHours,
+//       [day]: { ...prev.businessHours[day], [field]: value },
+//     },
+//   }));
+// };
 
-const handleCheckboxChange = (day, field) => {
-  setBusinessInfo((prev) => {
-    const updatedHours = { ...prev.businessHours }; // Copy the businessHours to avoid direct mutation
+// const handleCheckboxChange = (day, field) => {
+//   setBusinessInfo((prev) => {
+//     const updatedHours = { ...prev.businessHours }; // Copy the businessHours to avoid direct mutation
 
-    // Handle mutually exclusive checkboxes
-    if (field === "is24Hours") {
-      updatedHours[day].is24Hours = !updatedHours[day].is24Hours;
+//     // Handle mutually exclusive checkboxes
+//     if (field === "is24Hours") {
+//       updatedHours[day].is24Hours = !updatedHours[day].is24Hours;
       
-      // If 24 Hours is selected, ensure "Closed" is deselected and reset times.
-      if (updatedHours[day].is24Hours) {
-        updatedHours[day].isClosed = false;
-        updatedHours[day].open = "00:00";  // Set default 24-hour open time
-        updatedHours[day].close = "23:59"; // Set default 24-hour close time
-      } else {
-        updatedHours[day].open = ""; // Clear open time if not 24 hours
-        updatedHours[day].close = "";
-      }
-    }
+//       // If 24 Hours is selected, ensure "Closed" is deselected and reset times.
+//       if (updatedHours[day].is24Hours) {
+//         updatedHours[day].isClosed = false;
+//         updatedHours[day].open = "00:00";  // Set default 24-hour open time
+//         updatedHours[day].close = "23:59"; // Set default 24-hour close time
+//       } else {
+//         updatedHours[day].open = ""; // Clear open time if not 24 hours
+//         updatedHours[day].close = "";
+//       }
+//     }
 
-    if (field === "isClosed") {
-      updatedHours[day].isClosed = !updatedHours[day].isClosed;
+//     if (field === "isClosed") {
+//       updatedHours[day].isClosed = !updatedHours[day].isClosed;
       
-      // If "Closed" is selected, ensure "24 Hours" is deselected and clear times.
-      if (updatedHours[day].isClosed) {
-        updatedHours[day].is24Hours = false;
-        updatedHours[day].open = "";  // Clear open time if closed
-        updatedHours[day].close = ""; // Clear close time
-      }
-    }
+//       // If "Closed" is selected, ensure "24 Hours" is deselected and clear times.
+//       if (updatedHours[day].isClosed) {
+//         updatedHours[day].is24Hours = false;
+//         updatedHours[day].open = "";  // Clear open time if closed
+//         updatedHours[day].close = ""; // Clear close time
+//       }
+//     }
 
-    return { ...prev, businessHours: updatedHours }; // Return the updated state
-  });
-};
+//     return { ...prev, businessHours: updatedHours }; // Return the updated state
+//   });
+// };
 
 
 
-const saveBusinessHours = () => {
-  setIsModalOpen(false);
-  console.log("Updated Business Info:", BusinessInfo);
-};
+// const saveBusinessHours = () => {
+//   setIsModalOpen(false);
+//   console.log("Updated Business Info:", BusinessInfo);
+// };
 console.log(BusinessInfo)
 
 const onChangeHandler=(e,index= null)=>{
@@ -98,11 +98,11 @@ if( validations[name] && !validations[name].test((value)) ){
 
  }
 
- const HandleChange = (index,value)=>{
-  const store_Link=[...socialLinks];
-  store_Link[index]=value;
-  setSocialLinks(store_Link);
- }
+//  const HandleChange = (index,value)=>{
+//   const store_Link=[...socialLinks];
+//   store_Link[index]=value;
+//   setSocialLinks(store_Link);
+//  }
 
  const handleAddButton = (e) => {
   e.preventDefault();
@@ -213,73 +213,75 @@ if( validations[name] && !validations[name].test((value)) ){
         </button>
 
         {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
-              <h2 className="text-xl font-bold mb-4">Set Business Hours</h2>
-              <div className="grid grid-cols-2">
+        {
+        // isModalOpen && (
+//           <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+//             <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
+//               <h2 className="text-xl font-bold mb-4">Set Business Hours</h2>
+//               <div className="grid grid-cols-2">
                 
-              {Object.keys(BusinessInfo.businessHours).map((day) => (
-                <div key={day} className="mb-4">
-                  <h3 className="font-semibold">{day}</h3>
-                  <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2">
-  <input
-    type="checkbox"
-    checked={BusinessInfo.businessHours[day].is24Hours}
-    onChange={() => handleCheckboxChange(day, "is24Hours")}
-  />
-  <span>24 Hours Open</span>
-</label>
+//               {Object.keys(BusinessInfo.businessHours).map((day) => (
+//                 <div key={day} className="mb-4">
+//                   <h3 className="font-semibold">{day}</h3>
+//                   <div className="flex items-center gap-4">
+//                   <label className="flex items-center gap-2">
+//   <input
+//     type="checkbox"
+//     checked={BusinessInfo.businessHours[day].is24Hours}
+//     onChange={() => handleCheckboxChange(day, "is24Hours")}
+//   />
+//   <span>24 Hours Open</span>
+// </label>
 
-<label className="flex items-center gap-2">
-  <input
-    type="checkbox"
-    checked={BusinessInfo.businessHours[day].isClosed}
-    onChange={() => handleCheckboxChange(day, "isClosed")}
-  />
-  <span>Closed</span>
-</label>
+// <label className="flex items-center gap-2">
+//   <input
+//     type="checkbox"
+//     checked={BusinessInfo.businessHours[day].isClosed}
+//     onChange={() => handleCheckboxChange(day, "isClosed")}
+//   />
+//   <span>Closed</span>
+// </label>
 
-                  </div>
-                  {!BusinessInfo.businessHours[day].is24Hours && !BusinessInfo.businessHours[day].isClosed && (
-                    <div className="flex items-center gap-4 mt-2">
-                      <input
-                        type="time"
-                        value={BusinessInfo.businessHours[day].open}
-                        onChange={(e) => handleTimeChange(day, "open", e.target.value)}
-                        className="border border-gray-400 rounded py-1 px-2"
-                      />
-                      <span>to</span>
-                      <input
-                        type="time"
-                        value={BusinessInfo.businessHours[day].close}
-                        onChange={(e) => handleTimeChange(day, "close", e.target.value)}
-                        className="border border-gray-400 rounded py-1 px-2"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-              </div>
+//                   </div>
+//                   {!BusinessInfo.businessHours[day].is24Hours && !BusinessInfo.businessHours[day].isClosed && (
+//                     <div className="flex items-center gap-4 mt-2">
+//                       <input
+//                         type="time"
+//                         value={BusinessInfo.businessHours[day].open}
+//                         onChange={(e) => handleTimeChange(day, "open", e.target.value)}
+//                         className="border border-gray-400 rounded py-1 px-2"
+//                       />
+//                       <span>to</span>
+//                       <input
+//                         type="time"
+//                         value={BusinessInfo.businessHours[day].close}
+//                         onChange={(e) => handleTimeChange(day, "close", e.target.value)}
+//                         className="border border-gray-400 rounded py-1 px-2"
+//                       />
+//                     </div>
+//                   )}
+//                 </div>
+//               ))}
+//               </div>
 
-              <div className="flex justify-end mt-4">
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={saveBusinessHours}
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+//               <div className="flex justify-end mt-4">
+//                 <button
+//                   onClick={() => setIsModalOpen(false)}
+//                   className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+//                 >
+//                   Cancel
+//                 </button>
+//                 <button
+//                   onClick={saveBusinessHours}
+//                   className="bg-blue-500 text-white px-4 py-2 rounded"
+//                 >
+//                   Save
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+        // )
+        }
       </div>
              <div className="py-2">
               <h3 className="font-semibold py-2">Social Media Links</h3>

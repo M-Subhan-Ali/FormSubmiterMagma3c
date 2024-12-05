@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { formsContent } from "../Categories/Categories";
 import { CurrentStepUsers } from "../Users/Users";
 
-const Certificaions = () => {
+const Certificaions = ({ onNext }) => {
 
   const {Certificates,setCertificates,updateSectionData}=useContext(formsContent)
   const {setCurrentStepUser}=useContext(CurrentStepUsers)
@@ -38,7 +38,7 @@ const Certificaions = () => {
    e.preventDefault();
    setCurrentStepUser(2)
    updateSectionData("Certifications", Certificates);
-
+   onNext(Certificates);
   }
 
   return (
@@ -61,6 +61,7 @@ const Certificaions = () => {
                     : "",},
                   { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true ,accept:".jpg,.png,.jpeg"},
                   { label: "Institution Name", name:"InstitutionName" , type: "text", placeholder: "Institution Name", required: true },
+                  { label: "Description", name:"description" , type: "text", placeholder: "Description", required: true },
                   // { label: "Year of Completion", name:"YearofCompletion" , type: "date", required: false },
                 ].map(({label,type,placeholder,required,maxLength,name,min,max,accept},index)=>(
                 <div key={index} 
@@ -85,35 +86,6 @@ const Certificaions = () => {
                     </div>
               ))
               }
-              {/* <h3 className="font-semibold py-2">Certification Name <span className="text-red-500">*</span></h3>
-              <input type="text" required  placeholder="Certification Name" className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2">Issuing Organization <span className="text-red-500">*</span></h3>
-              <input type="text"  required placeholder="Issuing Organization" className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2">Certificate Number <span className="text-red-500">*</span></h3>
-              <input type="email" required  placeholder="Certificate Number" className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2">Date of Issue <span className="text-red-500">*</span></h3>
-              <input type="date" required   className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2">Date of Expiry <span className="text-red-500">*</span></h3>
-              <input type="date" required   className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2">Certificate Upload <span className="text-red-500">*</span></h3>
-              <input type="file" required   className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2">Institution Name <span className="text-red-500">*</span></h3>
-              <input type="text"  required  placeholder="Institution Name" className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-               <h3 className="font-semibold py-2">Year of Completion  <span className="text-red-500">*</span></h3>
-              <input type="date"  className="w-full py-2 px-2 border border-gray-400
-               rounded-md"/>
-              <h3 className="font-semibold py-2"> Verification Reference Number <span className="text-red-500">*</span></h3>
-              <input type="text" maxLength={13} required placeholder=" Verification Reference Number"
-               className="w-full border border-gray-400 
-              rounded py-2 px-2 "/>
-              */}
               <div className="flex items-center gap-2 ps-2 pt-4">
               <input type="checkbox" required className="cursor-pointer" />
               <p className="text-sm">I Agree To the Mobile Repair 
