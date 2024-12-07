@@ -47,7 +47,7 @@ const Certificaions = ({ onNext }) => {
     <div className="form-first-seperate-border border
              border-gray-300 px-3 my-3  pb-3 rounded">
             <h3 className="font-bold text-2xl py-4">Qualifications/Certificates</h3>
-              <hr />
+              <hr/>
               <div className="grid grid-cols-2 gap-4 pt-5 pb-8">
               {
                 [  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },

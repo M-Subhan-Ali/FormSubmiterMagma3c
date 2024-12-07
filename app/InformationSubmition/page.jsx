@@ -6,7 +6,6 @@ import { searchContext } from "../layout";
 
  const InformationSubmition= ()=>{
   const [description,setDescription]=useState(0);
-  const [showCategory,setShowCategory]=useState(false);
   const {next,setNext}=useContext(searchContext);
   const router=useRouter();
 
@@ -30,11 +29,10 @@ import { searchContext } from "../layout";
       return;
     }
     router.push("/FormBusinesses")
-    setShowCategory(true);
   }
   console.log(description)
   console.log(next)
-  console.log(showCategory)
+  
   return(
   <>
        <main className="w-full py-5">
