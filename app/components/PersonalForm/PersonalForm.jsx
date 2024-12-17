@@ -9,7 +9,31 @@ const PersonalForm = ({ onNext ,applicationCount}) => {
   const { currentStepUser,setCurrentStepUser } = useContext(CurrentStepUsers);
   const [emailError, setEmailError] = useState("");
   const [maxDob,setMaxDob]=useState("");
-
+  const fields=[
+    { label: "Name", name: "name", type: "text" , required: true ,minLength:3,maxLength:50},
+    { label: "Last Name", name: "lastName", type: "text", required: true },
+    { label: "Email Address", name: "email", type: "email", required: true },
+    { label: "Phone Number", name: "phone", type: "text", required: true,maxLength:20},
+    { label: "Date of Birth", name: "dob", type: "date" },
+    { label: "Permanent Address", name: "P_address", type: "text",maxLength:150, required: true },
+    { label: "NIC", name: "NIC", type: "text",required: true,minLength:13,maxLength:13 },
+    { label: "ID Card Front", name: "ID_Front", type: "file", required: true, accept: ".png,.jpg,.jpeg" },
+    { label: "ID Card Back", name: "ID_Back", type: "file", required: true , accept: ".png,.jpg,.jpeg" },
+    { label : "Verified CNIC from Nadra " , name:"CnicVerified",type:"file",required:true ,accept: ".png,.jpg,.jpeg" }
+  ];
+  const initialState={
+    name:"",
+    lastName:"",
+    email:"",
+    phone:"",
+    dob:"",
+    P_address:"",
+    R_address:"",
+    NIC:"",
+    ID_Front:"",
+    ID_Back:"",
+    CnicVerified:""
+  };
   
   useEffect(()=>{
     const today=new Date();
@@ -34,10 +58,11 @@ const PersonalForm = ({ onNext ,applicationCount}) => {
     if (missingFields.length > 0) {
       alert(`Please fill the following fields: ${missingFields.join(", ")}`);
       return;
-    }else{
+    }
     // setCurrentStepUser(0)
     updateSectionData("PersonalForm", personalInfo);
-  }
+    setPersonalInfo(initialState);
+  
   onNext(personalInfo);
   };
 
@@ -83,18 +108,7 @@ const PersonalForm = ({ onNext ,applicationCount}) => {
           <hr />
           {/* Fields */}
           <div className="grid grid-cols-2 pt-5 pb-8">
-          {[
-            { label: "Name", name: "name", type: "text" , required: true ,minLength:3,maxLength:50},
-            { label: "Last Name", name: "lastName", type: "text", required: true },
-            { label: "Email Address", name: "email", type: "email", required: true },
-            { label: "Phone Number", name: "phone", type: "text", required: true,maxLength:20},
-            { label: "Date of Birth", name: "dob", type: "date" },
-            { label: "Permanent Address", name: "P_address", type: "text",maxLength:150, required: true },
-            { label: "NIC", name: "NIC", type: "text",required: true,minLength:13,maxLength:13 },
-            { label: "ID Card Front", name: "ID_Front", type: "file", required: true, accept: ".png,.jpg,.jpeg" },
-            { label: "ID Card Back", name: "ID_Back", type: "file", required: true , accept: ".png,.jpg,.jpeg" },
-            { label : "Verified CNIC from Nadra " , name:"CnicVerified",type:"file",required:true ,accept: ".png,.jpg,.jpeg" }
-          ].map(({ label, name, type, required, maxLength ,min, minLength,accept}, index) => (
+          {fields.map(({ label, name, type, required, maxLength ,min, minLength,accept}, index) => (
             <div key={index} className="relative py-2 flex items-center">
               <h3 className="font-semibold flex w-1/3">
                 {label} {required && <span className="text-red-500">*</span>}

@@ -9,7 +9,30 @@ const Certificaions = ({ onNext }) => {
   const {setCurrentStepUser}=useContext(CurrentStepUsers)
   const [startDate, setStartDate] = useState("");
   const today = new Date().toISOString().split("T")[0]; 
- 
+  const fields=[  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },
+    { label: "Issuing Organization", name:"IssuingOrganization" , type: "text", placeholder: "Issuing Organization", required: true },
+    // { label: "Certificate Number", name:"CertificateNumber" , type: "text", placeholder: "Certificate Number", required: true },
+    { label: "Start Date", name:"startDate" , type: "date", required: true ,max:today},
+    { label: "End Date", name:"endDate" , type: "date", required: true , min:startDate
+      ? new Date(new Date(startDate).setFullYear(new Date(startDate).getFullYear() + 10))
+          .toISOString()
+          .split("T")[0]
+      : "",},
+    { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true ,accept:".jpg,.png,.jpeg"},
+    { label: "Institution Name", name:"InstitutionName" , type: "text", placeholder: "Institution Name", required: true },
+    { label: "Description", name:"description" , type: "text", placeholder: "Description", required: true },
+  ];
+ const initialState={
+  CertificationName: "",
+  IssuingOrganization: "",
+  // CertificateNumber: "",
+  startDate: "",
+  endDate: "",
+  CertificateUpload: "",
+  InstitutionName: "",
+  // YearofCompletion: "",
+  description:"",
+}
 
   const OnChangeHandler=(e)=>{
     const {name,value,files}=e.target;
@@ -37,6 +60,7 @@ const Certificaions = ({ onNext }) => {
   const HandleSubmit = (e) => {
    e.preventDefault();
    setCurrentStepUser(2)
+   setCertificates(initialState)
    updateSectionData("Certifications", Certificates);
    onNext(Certificates);
   }
@@ -50,20 +74,7 @@ const Certificaions = ({ onNext }) => {
               <hr/>
               <div className="grid grid-cols-2 gap-4 pt-5 pb-8">
               {
-                [  { label: "Certification Name", name:"CertificationName" , type: "text", placeholder: "Certification Name", required: true },
-                  { label: "Issuing Organization", name:"IssuingOrganization" , type: "text", placeholder: "Issuing Organization", required: true },
-                  // { label: "Certificate Number", name:"CertificateNumber" , type: "text", placeholder: "Certificate Number", required: true },
-                  { label: "Start Date", name:"startDate" , type: "date", required: true ,max:today},
-                  { label: "End Date", name:"endDate" , type: "date", required: true , min:startDate
-                    ? new Date(new Date(startDate).setFullYear(new Date(startDate).getFullYear() + 10))
-                        .toISOString()
-                        .split("T")[0]
-                    : "",},
-                  { label: "Certificate Upload", name:"CertificateUpload" , type: "file", required: true ,accept:".jpg,.png,.jpeg"},
-                  { label: "Institution Name", name:"InstitutionName" , type: "text", placeholder: "Institution Name", required: true },
-                  { label: "Description", name:"description" , type: "text", placeholder: "Description", required: true },
-                  // { label: "Year of Completion", name:"YearofCompletion" , type: "date", required: false },
-                ].map(({label,type,placeholder,required,maxLength,name,min,max,accept},index)=>(
+                fields.map(({label,type,placeholder,required,maxLength,name,min,max,accept},index)=>(
                 <div key={index} 
                 className="flex items-center">
                   <h3 className="w-1/3 font-semibold py-2">{label}

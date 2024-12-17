@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export const CurrentStepUsers = createContext();
 
 const Users = () => {
-  const { next, setNext } = useContext(formsContent);
+  const { next,modalNumber } = useContext(formsContent);
   const [staffData, setStaffData] = useState([]);
   const [currentStaff, setCurrentStaff] = useState(1);
   const [applicationCount, setApplicationCount] = useState(1);
@@ -58,13 +58,13 @@ const Users = () => {
   };
 
   const handleAddMoreStaff = () => {
-    setCurrentStepUser(1); 
+    // setCurrentStepUser(1); 
     setCurrentStaff((prev) => prev + 1);
     setShowAddAnother(false);
   };
 
   const handleFinalize = () => {
-    console.log("Finalized Data:", staffData);
+    router.push("/FormBusinesses");
     setShowAddAnother(false);
   };
 
@@ -91,24 +91,9 @@ const Users = () => {
         <CurrentStepUsers.Provider value={{ currentStepUser, setCurrentStepUser }}>
           {(next === "Shop with Multiple Technicians" || next === "Multi Sites & Multi Users") && (
             <div className="text-center text-lg font-semibold mb-4">
-              Application {applicationCount}, Staff Member {currentStaff}
-            </div>
-          )}
-
-          {next === "Sole Proprietorship" || next === "Shop with Multiple Technicians" ? (
-            <>
-              {currentStepUser === 1 && <PersonalForm onNext={handleNextStep} />}
-              {currentStepUser === 2 && <Certificaions onNext={handleNextStep} />}
-              {currentStepUser === 3 && <Experience onNext={handleNextStep} />}
-              {currentStepUser > steps.length && (
-                <>
-                  {next === "Sole Proprietorship" && (
-                    <div className="flex flex-col items-center">
-                      <p>Thank You for submitting the Application</p>
-                    </div>
-                  )}
-                  {(currentStepUser > steps.length && next === "Shop with Multiple Technicians" ||
-                    next === "Multi Sites & Multi Users") && showAddAnother && (
+              Application {applicationCount}
+              {/* , Staff Member {currentStaff} */}
+              {modalNumber === 2 && showAddAnother && (
                       <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
                         <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
                           <p className="text-lg font-semibold mb-4">Do you want to add another application?</p>
@@ -129,6 +114,22 @@ const Users = () => {
                         </div>
                       </div>
                     )}
+            </div>
+          )}
+
+          {next === "Sole Proprietorship" || next === "Shop with Multiple Technicians" ? (
+            <>
+              {currentStepUser === 1 && <PersonalForm onNext={handleNextStep} />}
+              {currentStepUser === 2 && <Certificaions onNext={handleNextStep} />}
+              {currentStepUser === 3 && <Experience onNext={handleNextStep} />}
+              {currentStepUser > steps.length && (
+                <>
+                  {next === "Sole Proprietorship" && (
+                    <div className="flex flex-col items-center">
+                      <p>Thank You for submitting the Application</p>
+                    </div>
+                  )}
+               
                 </>
               )}
             </>

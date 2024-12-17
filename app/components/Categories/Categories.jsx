@@ -11,6 +11,8 @@ import Users from "../Users/Users";
 export const formsContent=createContext();
 const Categories = ()=>{
   const{next,setNext}=useContext(searchContext);
+  const [modalNumber,setModalNumber]=useState(0);
+
   const steps= (() => {
     switch (next) {
       case "Sole Proprietorship":
@@ -31,22 +33,25 @@ const Categories = ()=>{
   const [formData, setFormData] = useState([]);
 
   const updateSectionData = (sectionName, data) => {  
-    setFormData((prev)=>{
-    const updatedData=[...prev];
-    const sectionIndex=updatedData.findIndex((item)=>item.saim === sectionName);
-    
-    if( sectionIndex !== -1){
-      updatedData[sectionIndex].data=data;
-    }else{
-      updatedData.push({saim:sectionName,data})
-    }
-
-    return updatedData;
-
-  })
-   
-    
+    setFormData((prev) => {
+      const updatedData = [...prev];
+      const sectionIndex = updatedData.findIndex((item) => item.form === sectionName);
+  
+      if (sectionIndex !== -1) {
+        const isDuplicate = updatedData[sectionIndex].data.some(
+          (existingData) => JSON.stringify(existingData) === JSON.stringify(data)
+        );
+  
+        if (!isDuplicate) {
+          updatedData[sectionIndex].data = [...updatedData[sectionIndex].data, { ...data }];
+        }
+      } else {
+        updatedData.push({ form: sectionName, data: [{ ...data }] });
+      }
+      return updatedData;
+    });
   };
+  
   console.log(formData)
   const [BusinessInfo,setBusinessInfo]=useState({
     businessName:"",
@@ -62,15 +67,6 @@ const Categories = ()=>{
     rentAgreement:"",
     socialLinks:"",
     paymentMethods:"",
-    // businessHours: {
-    //   Monday: { open: "", close: "", is24Hours: false, isClosed: false },
-    //   Tuesday: { open: "", close: "", is24Hours: false, isClosed: false },
-    //   Wednesday: { open: "", close: "", is24Hours: false, isClosed: false },
-    //   Thursday: { open: "", close: "", is24Hours: false, isClosed: false },
-    //   Friday: { open: "", close: "", is24Hours: false, isClosed: false },
-    //   Saturday: { open: "", close: "", is24Hours: false, isClosed: false },
-    //   Sunday: { open: "", close: "", is24Hours: false, isClosed: false },
-    // }
     })
   const [personalInfo,setPersonalInfo]=useState({
     name:"",
@@ -131,7 +127,7 @@ return(
             <div className="bg-white">
           <formsContent.Provider value={{updateSectionData,setCurrentStep,personalInfo,
             setPersonalInfo,storePersonal,Certificates,setCertificates,setStorePersonal,BusinessInfo,
-            setBusinessInfo,Experience,setExperience,next,setNext
+            setBusinessInfo,Experience,setExperience,next,setNext,modalNumber,setModalNumber
             }}>
             {currentStep ===0 && <BusinessDetails/>}
             {currentStep ===1 && <Users/>}
