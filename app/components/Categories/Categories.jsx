@@ -112,7 +112,8 @@ return(
   <div className="w-3/4 sm:w-4/5 mx-auto">
           <div className="flex justify-between  pb-3 ">
           {steps.map((step,index)=>(
-            <div onClick={()=>setCurrentStep(index)}
+            <div 
+            // onClick={()=>setCurrentStep(index)}
              key={index} className={`w-1/2 flex flex-col justify-center items-center pb-4
              cursor-pointer border-b-2 transition-colors duration-500 
              ${currentStep >= index ? " border-green-500" : "border-white"} `} >

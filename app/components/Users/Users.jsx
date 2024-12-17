@@ -73,7 +73,7 @@ const Users = () => {
       <div className="flex justify-between pb-3">
         {steps.map((step, index) => (
           <div
-            onClick={() => setCurrentStepUser(index + 1)}
+            // onClick={() => setCurrentStepUser(index + 1)}
             key={index}
             className={`${next === "Shop with Multiple Technicians" && "hidden"} w-1/2 flex flex-col justify-center items-center pb-4 cursor-pointer border-b-2 transition-colors duration-500 
              ${currentStepUser >= index + 1 ? " border-blue-500" : "border-white"}`}
